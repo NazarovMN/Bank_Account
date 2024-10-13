@@ -4,7 +4,7 @@ import "fmt"
 
 func main() {
 
-	var accountBalance float64 = 1000
+	var accountBalance int = 1000
 	var transactionHistory []string
 
 	fmt.Println("Welcome to Go Bank!")
@@ -22,11 +22,11 @@ func main() {
 		var choice int
 		fmt.Scan(&choice)
 
-		if choice == 1 {
-
+		switch choice {
+		case 1:
 			fmt.Println("Your Balance is : ", accountBalance)
-		} else if choice == 2 {
-			var depositAmount float64
+		case 2:
+			var depositAmount int
 			fmt.Print("Your deposit: ")
 			fmt.Scan(&depositAmount)
 
@@ -37,11 +37,11 @@ func main() {
 
 			accountBalance += depositAmount //accountBalance = accountBalance + deposit
 			fmt.Println("Balance Updated: ", accountBalance)
-			transaction := fmt.Sprintf("Deposit: %.1f ", depositAmount)
+			transaction := fmt.Sprintf("Deposit: %v ", depositAmount)
 			transactionHistory = append(transactionHistory, transaction)
 			fmt.Printf("Last 5 Transactions: %v \n", transactionHistory)
-		} else if choice == 3 {
-			var withdrawalAmount float64
+		case 3:
+			var withdrawalAmount int
 			fmt.Print("Your withdrawal: ")
 			fmt.Scan(&withdrawalAmount)
 
@@ -58,11 +58,10 @@ func main() {
 			accountBalance -= withdrawalAmount
 			fmt.Println("Balance Updated: ", accountBalance)
 
-			transaction := fmt.Sprintf("Withdrawal: %.1f", withdrawalAmount)
+			transaction := fmt.Sprintf("Withdrawal: %v", withdrawalAmount)
 			transactionHistory = append(transactionHistory, transaction)
 			fmt.Printf("Last 5 Transaction : %v \n", transactionHistory)
-		} else if choice == 4 {
-
+		case 4:
 			fmt.Println("Your Last Transactions:", transactionHistory)
 
 			numTransaction := len(transactionHistory)
@@ -73,15 +72,14 @@ func main() {
 			for i := start; i < numTransaction; i++ {
 				fmt.Println(transactionHistory[i])
 			}
-
-		} else if choice == 5 {
+		case 5:
 			fmt.Println("Bye Bye!")
-			break
-		} else {
+			fmt.Println("Thanks for choosing our bank! ")
+			return
+		default:
 			fmt.Println("Invalid Choice. Please choice a valid otion.")
 
 		}
-	}
 
-	fmt.Println("Thanks for choosing our bank! ")
+	}
 }
