@@ -99,6 +99,8 @@ func withdrawalAmount(accountBalance int, transactionHistory []string) {
 	fmt.Print("Your withdrawal: ")
 	fmt.Scan(&withdrawalAmount)
 
+	confirmation(updatedBalance, withdrawalAmount)
+
 	if withdrawalAmount <= 0 {
 		fmt.Println("Invalid Amount ,Must be greater than 0.")
 	}
@@ -107,13 +109,15 @@ func withdrawalAmount(accountBalance int, transactionHistory []string) {
 		fmt.Println("Invalid Amount. Your Balance is :", accountBalance)
 	}
 
-	updatedBalance -= withdrawalAmount
-	writeBalanceToFile(updatedBalance)
-	fmt.Println("Balance Updated: ", updatedBalance)
-
 	transaction := fmt.Sprintf("Withdrawal: %v", withdrawalAmount)
-	transactionHistory = append(transactionHistory, transaction)
-	fmt.Printf("Last 5 Transaction : %v \n", transactionHistory)
+	if accountBalance == accountBalance-withdrawalAmount {
+		fmt.Println(transaction)
+		transactionHistory = append(transactionHistory, transaction)
+		fmt.Printf("Last 5 Transaction : %v \n", transactionHistory)
+	} else {
+		return
+	}
+
 }
 
 func writeBalanceToFile(balance int) {
@@ -137,4 +141,27 @@ func getBalanceFromFile() (int, error) {
 
 	balance := int(convertedBalance)
 	return balance, nil
+}
+
+func confirmation(accountBalance, withdraw int) {
+	accountBalance, _ = getBalanceFromFile()
+	var config string
+	fmt.Printf("Are you sure you want to withdraw %v ? Y/N:", withdraw)
+	fmt.Scan(&config)
+	switch config {
+	case "Y", "y":
+		if accountBalance < withdraw {
+			fmt.Println("Insufficient funds. Operation canceled.")
+		} else {
+			fmt.Println("Your withdrawal is :", withdraw)
+			fmt.Println("Your Balance Updated :", accountBalance-withdraw)
+			writeBalanceToFile(accountBalance - withdraw)
+		}
+
+	case "N", "n":
+		fmt.Println("Operation Canceled.")
+
+	default:
+		fmt.Println("Invalid Input. Please choose Y or N.")
+	}
 }
